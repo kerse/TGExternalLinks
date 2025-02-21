@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram MiniApp Link Test v1.5</title>
+    <title>Telegram MiniApp Link Test v1.7</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
@@ -21,22 +21,30 @@
             font-size: 18px;
             cursor: pointer;
             border: none;
-            background-color: #007bff;
-            color: white;
             border-radius: 5px;
         }
-        button:hover {
+        button.blue {
+            background-color: #007bff;
+            color: white;
+        }
+        button.blue:hover {
             background-color: #0056b3;
+        }
+        button.green {
+            background-color: #28a745;
+            color: white;
+        }
+        button.green:hover {
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
-    <h2>Тест ссылок в Telegram MiniApp v1.5</h2>
-
-    <a href="https://lms.dxrt.ai/auth/telegram/login.php?token=t0nCx8E1KuCgGBpUv4voVYqbkhSO52X37ZTHNdylP6mBRFBfQt3sVMhRPiCyDmgeOILNvmnDOOBqcXazMclIIsdEIQIUYYwKz_UnvGKTsW2M1warV45sOMDsKCnabDFr3fVN05QeSSiQxZw7xqXlr5_QdysE3bWUtTh_HfYBZSnqH5_uzpzFwVnf3dTCeNAOxXFRRJVb&tgWebApp=1">ЖМЯК</a>
+    <h2>Тест ссылок в Telegram MiniApp v1.7</h2>
     
-    <button onclick="openInstantView()">Открыть через Instant View</button>
-    <button onclick="openExternalBrowser()">Открыть во внешнем браузере</button>
+    <button class="blue" onclick="openInstantView()">Открыть через Instant View</button>
+    <button class="blue" onclick="openExternalBrowser()">Открыть во внешнем браузере</button>
+    <button class="green" onclick="redirectToAuth()">Войти через Telegram</button>
     
     <script>
         function openInstantView() {
@@ -45,15 +53,18 @@
 
         function openExternalBrowser() {
             const url = 'https://dxrt.ai';
-            
-            // Пробуем открыть в новом окне
-            let newWindow = window.open(url, '_blank');
-            
-            // Если блокируется, принудительно перенаправляем
-            if (!newWindow || newWindow.closed || typeof newWindow.closed === "undefined") {
-                setTimeout(() => {
-                    window.location.href = url;
-                }, 500);
+            const a = document.createElement('a');
+            a.href = url;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function redirectToAuth() {
+            if (window.navigator.userAgent.includes("Telegram")) {
+                window.location.href = "https://lms.dxrt.ai/auth/telegram/login.php?token=ud0HmSgn3QFPurnbGQCE6teSxPhe6n3RX1fHU4kmErFzwfsPdrf89-9F782qyLTKTp__BRu5sqelxYra8j9PYe0b3Qq1milrkP_TQO6Y_pKKVWIY1E5-Z4qyH5DjnUUfy9n6w60jIROqjyeQlamowXWOf0CQjCN1sXLYT_nKMM0Gs0g1MwtgCiBOcD1bvk37soL4ZSQ7" + window.location.search;
             }
         }
     </script>
