@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram MiniApp Link Test v1.4</title>
+    <title>Telegram MiniApp Link Test v1.5</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
@@ -31,7 +31,7 @@
     </style>
 </head>
 <body>
-    <h2>Тест ссылок в Telegram MiniApp v1.4</h2>
+    <h2>Тест ссылок в Telegram MiniApp v1.5</h2>
     
     <button onclick="openInstantView()">Открыть через Instant View</button>
     <button onclick="openExternalBrowser()">Открыть во внешнем браузере</button>
@@ -43,11 +43,15 @@
 
         function openExternalBrowser() {
             const url = 'https://dxrt.ai';
-            if (window.TelegramWebview) {
-                const chromeUrl = `intent://${url.replace(/^https?:\/\//, '')}#Intent;scheme=https;end`;
-                window.location.href = chromeUrl;
-            } else {
-                window.open(url, '_blank');
+            
+            // Пробуем открыть в новом окне
+            let newWindow = window.open(url, '_blank');
+            
+            // Если блокируется, принудительно перенаправляем
+            if (!newWindow || newWindow.closed || typeof newWindow.closed === "undefined") {
+                setTimeout(() => {
+                    window.location.href = url;
+                }, 500);
             }
         }
     </script>
