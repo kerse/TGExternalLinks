@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram MiniApp Link Test v1.7</title>
+    <title>Telegram MiniApp Link Test v1.8</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
@@ -11,6 +11,17 @@
             text-align: center;
             font-family: Arial, sans-serif;
             padding-top: 50px;
+        }
+        input {
+            display: block;
+            width: 80%;
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
         }
         button {
             display: block;
@@ -21,51 +32,37 @@
             font-size: 18px;
             cursor: pointer;
             border: none;
-            border-radius: 5px;
-        }
-        button.blue {
-            background-color: #007bff;
-            color: white;
-        }
-        button.blue:hover {
-            background-color: #0056b3;
-        }
-        button.green {
             background-color: #28a745;
             color: white;
+            border-radius: 5px;
         }
-        button.green:hover {
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        button:hover:enabled {
             background-color: #218838;
         }
     </style>
 </head>
 <body>
-    <h2>Тест ссылок в Telegram MiniApp v1.7ю1</h2>
+    <h2>Telegram MiniApp Link Test v1.8</h2>
     
-    <button class="blue" onclick="openInstantView()">Открыть через Instant View</button>
-    <button class="blue" onclick="openExternalBrowser()">Открыть во внешнем браузере</button>
-    <button class="green" onclick="redirectToAuth()">Войти через Telegram</button>
+    <input type="text" id="tokenInput" placeholder="Введите токен" oninput="updateButtonState()">
+    <button id="authButton" onclick="redirectToAuth()" disabled>Войти в Moodle</button>
     
     <script>
-        function openInstantView() {
-            Telegram.WebApp.openLink('https://dxrt.ai', { tryInstantView: true });
-        }
-
-        function openExternalBrowser() {
-            const url = 'https://dxrt.ai';
-            const a = document.createElement('a');
-            a.href = url;
-            a.target = '_blank';
-            a.rel = 'noopener noreferrer';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+        function updateButtonState() {
+            const token = document.getElementById('tokenInput').value;
+            document.getElementById('authButton').disabled = token.trim() === "";
         }
 
         function redirectToAuth() {
-    Telegram.WebApp.openLink('https://lms.dxrt.ai/auth/telegram/login.php?token=adYoy1R0b35u55jYLBLdcW6487MosoEubH3ZICzYsuAUdqhK5N8j2DHtt32ZBkRW7Ks7M0s8IPi9dF45JzqtS7xj8Mw2XC8OJo9Gvcne76N9BdK6CHSrVywReFwYDWCeWx5ehXld98mkGXhV6KegD_Tj7IRQ9juC9LztJmNkEdErzf_iNEst1d9t5lAKFA5-LDhr1CzM');
-}
-        
+            const token = document.getElementById('tokenInput').value;
+            if (token.trim() !== "") {
+                Telegram.WebApp.openLink(`https://lms.dxrt.ai/auth/telegram/login.php?token=${encodeURIComponent(token)}`);
+            }
+        }
     </script>
 </body>
 </html>
